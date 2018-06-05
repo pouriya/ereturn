@@ -1,0 +1,10 @@
+{application
+,ereturn
+,[{description, "Providing safe function result"}
+ ,{vsn, "18.6.5"}
+ ,{applications, [kernel, stdlib]}
+ ,{modules, [return]}
+ ,{maintainers, ["pouriya-jahanbakhsh@gmail.com"]}
+ ,{licenses, ["BSD 3-Clause"]}
+ ,{links, [{"GitHub", "https://github.com/pouriya-jahanbakhsh/ereturn"}
+          ,{"Hex", "https://hex.pm/packages/ereturn"}]}]}.
