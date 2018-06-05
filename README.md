@@ -53,7 +53,8 @@ func_4(Arg) ->
 		Value when ... ->
 			?ok(Value); %% {'ok', Value}
 		_ ->
-			?err(reason_of_error, [{argument, Arg}]) %% {'error', {reason_of_error, [{argument, Arg}]}}
+			?err(reason_of_error, [{argument, Arg}]) 
+			%% {'error', {reason_of_error, [{argument, Arg}]}}
 	end.
 
 -spec func_5() -> return:result().
@@ -67,7 +68,7 @@ func_5(Arg) ->
 		_:Reason ->
 			?err(crash, [{reason, Reason}, ?stacktrace, ?module, ?function, {arguments, [Arg]}]) 
 			%% {error, {crash, [{reason, Reason}
-		    %%                 ,{stacktrace, erlang:get_stacktrace()}
+			%%                 ,{stacktrace, erlang:get_stacktrace()}
 			%%                 ,{module, ?MODULE}
 			%%                 ,{function, ?FUNCTION_NAME}
 			%%                 ,{arguments, [Arg]}]}}
