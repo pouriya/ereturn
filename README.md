@@ -47,7 +47,7 @@ func_3() ->
 			?err(reason_of_error) %% {'error', {reason_of_error, []}}
 	end.
 
--spec func_4() -> return:ok_result() | return:error().
+-spec func_4(term()) -> return:ok_result() | return:error().
 func_4(Arg) ->
 	case ... of
 		Value when ... ->
@@ -57,7 +57,7 @@ func_4(Arg) ->
 			%% {'error', {reason_of_error, [{argument, Arg}]}}
 	end.
 
--spec func_5() -> return:result().
+-spec func_5(term()) -> return:result().
 func_5(Arg) ->
 	try ... of
 		Value when ... ->
