@@ -1,9 +1,9 @@
 {application
 ,ereturn
 ,[{description, "Providing safe function result"}
- ,{vsn, "18.6.5"}
+ ,{vsn, "18.6.14"}
  ,{applications, [kernel, stdlib]}
- ,{modules, [return]}
+ , {modules, [ret]}
  ,{maintainers, ["pouriya-jahanbakhsh@gmail.com"]}
  ,{licenses, ["BSD 3-Clause"]}
  ,{links, [{"GitHub", "https://github.com/pouriya-jahanbakhsh/ereturn"}

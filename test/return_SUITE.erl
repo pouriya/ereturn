@@ -16,7 +16,6 @@
 %% Records & Macros & Includes:
 
 -include_lib("eunit/include/eunit.hrl").
--include("return.hrl").
 
 %% -------------------------------------------------------------------------------------------------
 %% ct callbacks:
@@ -49,21 +48,49 @@ end_per_testcase(_, _) ->
 %% Test cases:
 
 '1'(_) ->
-    ?assertEqual(ok, ?ok),
-    ?assertEqual({ok, foo}, ?ok(foo)),
+    ?assertEqual(ok, ret:ok()),
+    ?assertEqual({ok, foo}, ret:ok(foo)),
 
-    ?assertEqual({error, {foo, []}}, ?err(foo)),
-    ?assertEqual({error, {foo, [{bar, baz}]}}, ?err(foo, [{bar, baz}])),
-    ?assertEqual({error, {foo, [{bar, baz}]}}, ?err(foo, [{bar, baz}])),
+    ?assert(ret:true()),
+    ?assertNot(ret:false()),
 
-    Result = ?stacktrace,
-    ?assertMatch({stacktrace, _}, ?stacktrace),
-    {_, ST} = Result,
-    ?assert(erlang:is_list(ST)),
+    ?assertEqual({error, {oops, []}}, ret:err(oops)),
+    ?assertEqual({error, {oops, []}}, ret:err(oops, [])),
 
-    ?assertExit({reason_type, [{value, 1}, {stacktrace, _}]}, ?err(1)),
-    ?assertExit({parameters_type, [{value, 1}, {stacktrace, _}]}, ?err(foo, 1)),
-    ?assertExit({parameter, [{value, 1}, {stacktrace, _}]}, ?err(foo, [1])),
-    ?assertExit({parameter, [{value, 1}, {stacktrace, _}]}, ?err(foo, [1|1])),
-    ?assertExit({parameter_type, [{value, "bar"}, {stacktrace, _}]}, ?err(foo, [{"bar", baz}])),
-    ?assertExit({parameter_type, [{value, "bar"}, {stacktrace, _}]}, ?err(foo, [{a, b},{"bar", baz}, {c, d}])).
+    ?assertEqual({error, {oops, [{ok, value}]}}, ret:err(oops, [{ok, value}])),
+    ?assertEqual({error, {oops, [{ok, "value"}]}}, ret:err(oops, [{ok, "value"}])),
+
+    ?assertEqual({error, {oops, [{foo, bar}, {baz, qux}]}}, ret:err(oops, [{foo, bar}, {baz, qux}])),
+
+    ?assertError({reason_type, _}, ret:err(<<>>)),
+    ?assertError({reason_type, _}, ret:err(<<>>, [])),
+    ?assertError({parameter, _}, ret:err(atom, [oo])),
+    ?assertError({parameters_type, _}, ret:err(atom, 1)),
+    ?assertError({parameter_tag_type, _}, ret:err(atom, [{1, 0}])),
+
+    ?assertEqual({foo, []}, ret:reason(foo)),
+    ?assertEqual({foo, [{bar, baz}]}, ret:reason(foo, [{bar, baz}])),
+
+    ?assertEqual({module, foo}, ret:m(foo)),
+    ?assertEqual({function, foo}, ret:f(foo)),
+    ?assertEqual({arguments, [foo]}, ret:a([foo])),
+    ?assertEqual({arguments, []}, ret:a([])),
+
+    ?assertEqual([{module, foo}, {function, bar}, {arguments, [baz]}], ret:mfa(foo, bar, [baz])),
+
+    ?assertEqual({value, ""}, ret:v("")),
+    ?assertEqual({reason, 1.2}, ret:r(1.2)),
+    ?assertEqual({foo, bar}, ret:ep(foo, bar)).
+
+
+
+
+
+
+
+
+
+
+
+
+

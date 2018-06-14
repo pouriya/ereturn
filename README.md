@@ -13,6 +13,9 @@ Every Function should yields a value with type `return:result/0`:
 -type   error_parameters() :: [] | [error_parameter()].
 -type    error_parameter() :: {atom(), term()}.
 
+-type boolean_result() :: boolean_true() | boolean_false().
+-type  boolean_true() :: 'true'.
+-type  boolean_false() :: 'false'.
 ```
 
 # Example
@@ -25,35 +28,32 @@ Suppose i have a module named `api.erl`:
         ,func_4/1
         ,func_5/1]).
 
-%% Include return's header file and use its macros:
--include("/path/to/return/include/return.hrl").
-
 -spec func_1() -> return:ok().
 func_1() ->
 	...
-	?ok. %% means 'ok'
+	ret:ok(). %% means 'ok'
 
 -spec func_2() -> return:ok_result().
 func_2() ->
 	...
-	?ok(foo). %% {'ok', foo}
+	ret:ok(foo). %% {'ok', foo}
 
 -spec func_3() -> return:ok() | return:error().
 func_3() ->
 	case ... of
 		true ->
-			?ok;
+			ret:ok();
 		false ->
-			?err(reason_of_error) %% {'error', {reason_of_error, []}}
+			ret:err(reason_of_error) %% {'error', {reason_of_error, []}}
 	end.
 
 -spec func_4(term()) -> return:ok_result() | return:error().
 func_4(Arg) ->
 	case ... of
 		Value when ... ->
-			?ok(Value); %% {'ok', Value}
+			ret:ok(Value); %% {'ok', Value}
 		_ ->
-			?err(reason_of_error, [{argument, Arg}]) 
+			ret:err(reason_of_error, [{argument, Arg}]) 
 			%% {'error', {reason_of_error, [{argument, Arg}]}}
 	end.
 
@@ -61,12 +61,12 @@ func_4(Arg) ->
 func_5(Arg) ->
 	try ... of
 		Value when ... ->
-			?ok(Value);
+			ret:ok(Value);
 		_ ->
-			?ok
+			ret:ok()
 	catch
 		_:Reason ->
-			?err(crash, [{reason, Reason}, ?stacktrace, ?module, ?function, {arguments, [Arg]}]) 
+			ret:err(crash, [ret:r(Reason), ret:st(), ret:mfa(?MODULE, ?FUNCTION_NAME, [Arg])]) 
 			%% {error, {crash, [{reason, Reason}
 			%%                 ,{stacktrace, erlang:get_stacktrace()}
 			%%                 ,{module, ?MODULE}
@@ -78,4 +78,4 @@ func_5(Arg) ->
 Note that `reason()` **must** be `atom()` and `error_parameters()` **must** be a proplist, otherwise it exits with reason like `{parameter_type, ...}`.
 
 #### Hex
-[**`18.6.5`**](https://hex.pm/packages/ereturn)
+[**`18.6.14`**](https://hex.pm/packages/ereturn)
